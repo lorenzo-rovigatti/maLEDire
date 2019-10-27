@@ -25,6 +25,14 @@ void TextDisplay::clear() {
 }
 
 void TextDisplay::draw() {
+	// move the cursor to the beginning so as to overwrite the last output
+	if(!_never_drawn) {
+		std::cout << "\r";
+		for(int i = 0; i < _rows; i++) {
+			std::cout << "\033[1A";
+		}
+	}
+
 	for(int i = 0; i < _rows; i++) {
 		for(int j = 0; j < _cols; j++) {
 			int idx = _idx(j, i);
@@ -37,6 +45,8 @@ void TextDisplay::draw() {
 		}
 		std::cout << std::endl;
 	}
+
+	_never_drawn = false;
 }
 
 void TextDisplay::set_h_line(double v_pos, double from, double to, int new_value) {

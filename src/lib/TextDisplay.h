@@ -35,6 +35,7 @@ private:
 
 	int _cols;
 	int _rows;
+	bool _never_drawn = true;
 
 	std::vector<int> _canvas;
 };
