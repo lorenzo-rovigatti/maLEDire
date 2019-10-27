@@ -1,5 +1,6 @@
 SET(mldr_lib_SOURCES
 	LEDDisplay.cpp
+	TextDisplay.cpp
 )
 
 ADD_LIBRARY(_maLEDire SHARED ${mldr_lib_SOURCES})

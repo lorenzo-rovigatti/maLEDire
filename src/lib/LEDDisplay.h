@@ -14,6 +14,8 @@ class LEDDisplay {
 public:
 	LEDDisplay();
 	virtual ~LEDDisplay();
+
+	void draw();
 };
 
 } /* namespace mldr */

@@ -10,12 +10,15 @@
 namespace mldr {
 
 LEDDisplay::LEDDisplay() {
-	// TODO Auto-generated constructor stub
 
 }
 
 LEDDisplay::~LEDDisplay() {
-	// TODO Auto-generated destructor stub
+
+}
+
+void LEDDisplay::draw() {
+
 }
 
 } /* namespace mldr */
