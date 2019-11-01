@@ -10,7 +10,10 @@
 
 #include <chrono>
 #include <vector>
+#include <memory>
 #include <termios.h>
+
+#include "Snake.h"
 
 namespace mldr {
 
@@ -22,11 +25,11 @@ public:
 	void start();
 
 private:
+	bool _handle_input();
+
 	const std::chrono::nanoseconds _timestep;
 	struct termios _termios_struct;
-
-	bool _handle_input();
-	virtual void _use_input(char c);
+	std::shared_ptr<Snake> _world;
 };
 
 } /* namespace mldr */

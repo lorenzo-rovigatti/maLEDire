@@ -11,12 +11,15 @@
 #include <vector>
 #include <cmath>
 #include <chrono>
+#include <memory>
 
 namespace mldr {
 
+class Snake;
+
 class TextDisplay {
 public:
-	TextDisplay(int cols, int rows, std::chrono::nanoseconds pause_for);
+	TextDisplay(int cols, int rows, std::chrono::nanoseconds pause_for, std::shared_ptr<Snake> world);
 	virtual ~TextDisplay();
 
 	void clear();
@@ -40,6 +43,7 @@ private:
 	bool _never_drawn = true;
 
 	std::vector<int> _canvas;
+	std::shared_ptr<Snake> _world;
 };
 
 } /* namespace mldr */

@@ -7,15 +7,18 @@
 
 #include "TextDisplay.h"
 
+#include "Snake.h"
+
 #include <iostream>
 #include <thread>
 
 namespace mldr {
 
-TextDisplay::TextDisplay(int cols, int rows, std::chrono::nanoseconds pause_for) :
+TextDisplay::TextDisplay(int cols, int rows, std::chrono::nanoseconds pause_for, std::shared_ptr<Snake> world) :
 				_cols(cols),
 				_rows(rows),
-				_pause_for(pause_for) {
+				_pause_for(pause_for),
+				_world(world) {
 	_canvas.resize(_cols * _rows, 0);
 }
 
@@ -34,6 +37,14 @@ void TextDisplay::draw() {
 		for(int i = 0; i < _rows; i++) {
 			std::cout << "\033[1A";
 		}
+	}
+
+	clear();
+	for(auto segment : _world->segments) {
+		int col = _hpos_to_int(segment[0]);
+		int pos = _vpos_to_int(segment[1]);
+		int idx = _idx(col, pos);
+		_canvas[idx] = 1;
 	}
 
 	for(int i = 0; i < _rows; i++) {

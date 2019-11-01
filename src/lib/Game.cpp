@@ -22,6 +22,8 @@ Game::Game(std::chrono::nanoseconds timestep) :
 	tcgetattr(STDIN_FILENO, &_termios_struct);
 	_termios_struct.c_lflag &= ~ICANON;
 	tcsetattr(STDIN_FILENO, TCSANOW, &_termios_struct);
+
+	_world = std::make_shared<Snake>(_timestep);
 }
 
 Game::~Game() {
@@ -29,9 +31,7 @@ Game::~Game() {
 }
 
 void Game::start() {
-	auto one_second = std::chrono::milliseconds(1000);
-
-	TextDisplay display(32, 16, _timestep / 2);
+	TextDisplay display(32, 16, _timestep / 2, _world);
 
 	using clock = std::chrono::high_resolution_clock;
 	std::chrono::nanoseconds lag(0ns);
@@ -47,8 +47,7 @@ void Game::start() {
 		// update game logic as lag permits
 		while(lag >= _timestep) {
 			lag -= _timestep;
-			//previous_state = current_state;
-			//update(&current_state); // update at a fixed rate each time
+			_world->update();
 		}
 
 		// calculate how close or far we are from the next _timestep
@@ -70,13 +69,9 @@ bool Game::_handle_input() {
 		return true;
 	}
 
-	_use_input(c);
+	_world->use_input(c);
 
 	return false;
-}
-
-void Game::_use_input(char c) {
-
 }
 
 } /* namespace mldr */
