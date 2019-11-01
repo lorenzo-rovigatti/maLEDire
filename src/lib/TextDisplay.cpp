@@ -8,11 +8,14 @@
 #include "TextDisplay.h"
 
 #include <iostream>
+#include <thread>
 
 namespace mldr {
 
-TextDisplay::TextDisplay(int cols, int rows) :
-	_cols(cols), _rows(rows) {
+TextDisplay::TextDisplay(int cols, int rows, std::chrono::nanoseconds pause_for) :
+				_cols(cols),
+				_rows(rows),
+				_pause_for(pause_for) {
 	_canvas.resize(_cols * _rows, 0);
 }
 
@@ -37,16 +40,18 @@ void TextDisplay::draw() {
 		for(int j = 0; j < _cols; j++) {
 			int idx = _idx(j, i);
 			if(_canvas[idx]) {
-				std::cout << " x";
+				std::cout << "o ";
 			}
 			else {
-				std::cout << "  ";
+				std::cout << ". ";
 			}
 		}
 		std::cout << std::endl;
 	}
 
 	_never_drawn = false;
+
+	std::this_thread::sleep_for(_pause_for);
 }
 
 void TextDisplay::set_h_line(double v_pos, double from, double to, int new_value) {

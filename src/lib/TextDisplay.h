@@ -10,12 +10,13 @@
 
 #include <vector>
 #include <cmath>
+#include <chrono>
 
 namespace mldr {
 
 class TextDisplay {
 public:
-	TextDisplay(int cols, int rows);
+	TextDisplay(int cols, int rows, std::chrono::nanoseconds pause_for);
 	virtual ~TextDisplay();
 
 	void clear();
@@ -35,6 +36,7 @@ private:
 
 	int _cols;
 	int _rows;
+	std::chrono::nanoseconds _pause_for;
 	bool _never_drawn = true;
 
 	std::vector<int> _canvas;

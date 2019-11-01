@@ -1,4 +1,5 @@
 SET(mldr_lib_SOURCES
+	Game.cpp
 	LEDDisplay.cpp
 	TextDisplay.cpp
 )

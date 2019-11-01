@@ -7,32 +7,21 @@
 
 #include <lib/TextDisplay.h>
 
-#include <thread>
-#include <chrono>
+#include <lib/Game.h>
+
+#include <termios.h>
+#include <unistd.h>
+
+// to use ns and ms
+using namespace std::chrono_literals;
+
+// we use a fixed timestep of 1 / (60 fps) = 16 milliseconds
+constexpr std::chrono::nanoseconds timestep(100ms);
 
 int main(int argc, char *argv[]) {
-	auto one_second = std::chrono::milliseconds(1000);
+	mldr::Game game(timestep);
 
-	mldr::TextDisplay display(32, 16);
-
-	display.draw();
-	std::this_thread::sleep_for(one_second);
-
-	display.set_h_line(0., 0., 1., 1);
-	display.draw();
-	std::this_thread::sleep_for(one_second);
-
-	display.set_h_line(1., 0., 1., 1);
-	display.draw();
-	std::this_thread::sleep_for(one_second);
-
-	display.set_v_line(0., 0., 1., 1);
-	display.draw();
-	std::this_thread::sleep_for(one_second);
-
-	display.set_v_line(1., 0., 1., 1);
-	display.draw();
-	std::this_thread::sleep_for(one_second);
+	game.start();
 
 	return 0;
 }
