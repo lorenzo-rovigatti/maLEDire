@@ -13,13 +13,15 @@
 #include <chrono>
 #include <memory>
 
+#include "defs.h"
+
 namespace mldr {
 
 class Snake;
 
 class TextDisplay {
 public:
-	TextDisplay(int cols, int rows, std::chrono::nanoseconds pause_for, std::shared_ptr<Snake> world);
+	TextDisplay(coordinates dim, std::chrono::nanoseconds pause_for, std::shared_ptr<Snake> world);
 	virtual ~TextDisplay();
 
 	void clear();
@@ -31,14 +33,13 @@ public:
 private:
 	int _idx(int col, int row);
 	int _hpos_to_int(double coord) {
-		return std::round(coord * (_cols - 1));
+		return std::round(coord * (_dimension[0] - 1));
 	}
 	int _vpos_to_int(double coord) {
-		return std::round(coord * (_rows - 1));
+		return std::round(coord * (_dimension[1] - 1));
 	}
 
-	int _cols;
-	int _rows;
+	coordinates _dimension;
 	std::chrono::nanoseconds _pause_for;
 	bool _never_drawn = true;
 

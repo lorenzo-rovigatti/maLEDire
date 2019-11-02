@@ -10,24 +10,26 @@
 
 #include <chrono>
 #include <vector>
-#include <array>
+
+#include "defs.h"
 
 namespace mldr {
 
 class Snake {
 public:
-	Snake(std::chrono::nanoseconds timestep);
+	Snake(coordinates dim, std::chrono::nanoseconds timestep);
 	virtual ~Snake();
 
 	void update();
 	void use_input(char c);
 
-	std::vector<std::array<float, 2>> segments;
+	std::vector<coordinates> segments;
 
 private:
-	std::array<float, 2> _current_direction;
+	coordinates _current_direction;
 	float _speed;
 	float _dt;
+	float _elapsed_time;
 };
 
 } /* namespace mldr */

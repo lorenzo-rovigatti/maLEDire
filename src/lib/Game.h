@@ -39,6 +39,7 @@ private:
 
 	std::queue<char> _key_pressed;
 	std::thread _input_thread;
+	coordinates _dimension = {32, 16};
 };
 
 } /* namespace mldr */

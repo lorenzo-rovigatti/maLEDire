@@ -23,7 +23,7 @@ Game::Game(std::chrono::nanoseconds timestep) :
 	_termios_struct.c_lflag &= ~ICANON;
 	tcsetattr(STDIN_FILENO, TCSANOW, &_termios_struct);
 
-	_world = std::make_shared<Snake>(_timestep);
+	_world = std::make_shared<Snake>(_dimension, _timestep);
 }
 
 Game::~Game() {
@@ -31,7 +31,7 @@ Game::~Game() {
 }
 
 void Game::start() {
-	TextDisplay display(32, 16, _timestep / 2, _world);
+	TextDisplay display(_dimension, _timestep / 2, _world);
 
 	using clock = std::chrono::high_resolution_clock;
 	std::chrono::nanoseconds lag(0ns);

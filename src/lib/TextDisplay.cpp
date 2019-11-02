@@ -14,12 +14,11 @@
 
 namespace mldr {
 
-TextDisplay::TextDisplay(int cols, int rows, std::chrono::nanoseconds pause_for, std::shared_ptr<Snake> world) :
-				_cols(cols),
-				_rows(rows),
+TextDisplay::TextDisplay(coordinates dim, std::chrono::nanoseconds pause_for, std::shared_ptr<Snake> world) :
+				_dimension(dim),
 				_pause_for(pause_for),
 				_world(world) {
-	_canvas.resize(_cols * _rows, 0);
+	_canvas.resize(_dimension[0] * _dimension[1], 0);
 }
 
 TextDisplay::~TextDisplay() {
@@ -34,21 +33,19 @@ void TextDisplay::draw() {
 	// move the cursor to the beginning so as to overwrite the last output
 	if(!_never_drawn) {
 		std::cout << "\r";
-		for(int i = 0; i < _rows; i++) {
+		for(int i = 0; i < _dimension[1]; i++) {
 			std::cout << "\033[1A";
 		}
 	}
 
 	clear();
 	for(auto segment : _world->segments) {
-		int col = _hpos_to_int(segment[0]);
-		int pos = _vpos_to_int(segment[1]);
-		int idx = _idx(col, pos);
+		int idx = _idx(segment[0], segment[1]);
 		_canvas[idx] = 1;
 	}
 
-	for(int i = 0; i < _rows; i++) {
-		for(int j = 0; j < _cols; j++) {
+	for(int i = 0; i < _dimension[1]; i++) {
+		for(int j = 0; j < _dimension[0]; j++) {
 			int idx = _idx(j, i);
 			if(_canvas[idx]) {
 				std::cout << "o ";
@@ -88,7 +85,7 @@ void TextDisplay::set_v_line(double h_pos, double from, double to, int new_value
 }
 
 int TextDisplay::_idx(int col, int row) {
-	return row * _cols + col;
+	return row * _dimension[0] + col;
 }
 
 } /* namespace mldr */

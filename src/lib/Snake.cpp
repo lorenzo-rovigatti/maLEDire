@@ -9,11 +9,12 @@
 
 namespace mldr {
 
-Snake::Snake(std::chrono::nanoseconds timestep) :
-	_current_direction({0., 1.}),
-	_speed(0.1) {
+Snake::Snake(coordinates dim, std::chrono::nanoseconds timestep) :
+				_current_direction( { 0, 1 }),
+				_speed(2.),
+				_elapsed_time(0.) {
 	_dt = std::chrono::duration_cast<std::chrono::duration<float>>(timestep).count();
-	segments.push_back({0.5, 0.5});
+	segments.push_back(coordinates( { dim[0] / 2, dim[1] / 2 }));
 }
 
 Snake::~Snake() {
@@ -23,30 +24,35 @@ Snake::~Snake() {
 void Snake::use_input(char c) {
 	switch(c) {
 	case 'w':
-		_current_direction[0] = 0.;
-		_current_direction[1] = -1.;
+		_current_direction[0] = 0;
+		_current_direction[1] = -1;
 		break;
 	case 'd':
-		_current_direction[0] = 1.;
-		_current_direction[1] = 0.;
+		_current_direction[0] = 1;
+		_current_direction[1] = 0;
 		break;
 	case 's':
-		_current_direction[0] = 0.;
-		_current_direction[1] = 1.;
+		_current_direction[0] = 0;
+		_current_direction[1] = 1;
 		break;
 	case 'a':
-		_current_direction[0] = -1.;
-		_current_direction[1] = 0.;
+		_current_direction[0] = -1;
+		_current_direction[1] = 0;
 		break;
 	}
 }
 
 void Snake::update() {
-	float delta = _dt * _speed;
+	_elapsed_time += _dt;
+	float delta = _elapsed_time * _speed;
 
-	for(auto &segment : segments) {
-		segment[0] += _current_direction[0] * delta;
-		segment[1] += _current_direction[1] * delta;
+	if(delta >= 1.) {
+		for(auto &segment : segments) {
+			segment[0] += _current_direction[0];
+			segment[1] += _current_direction[1];
+		}
+
+		_elapsed_time = 0.;
 	}
 
 }
