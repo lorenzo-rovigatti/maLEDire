@@ -11,6 +11,11 @@
 #include <chrono>
 #include <vector>
 #include <memory>
+
+#include <mutex>
+#include <thread>
+#include <queue>
+
 #include <termios.h>
 
 #include "Snake.h"
@@ -25,11 +30,15 @@ public:
 	void start();
 
 private:
-	bool _handle_input();
+	void _handle_input();
 
 	const std::chrono::nanoseconds _timestep;
 	struct termios _termios_struct;
 	std::shared_ptr<Snake> _world;
+	bool _quit = false;
+
+	std::queue<char> _key_pressed;
+	std::thread _input_thread;
 };
 
 } /* namespace mldr */
