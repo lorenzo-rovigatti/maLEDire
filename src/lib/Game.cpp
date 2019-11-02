@@ -46,11 +46,25 @@ void Game::start() {
 		time_start = current_time;
 		lag += std::chrono::duration_cast<std::chrono::nanoseconds>(delta_time);
 
+		if(!_key_pressed.empty()) {
+			std::lock_guard<std::mutex> lock(_mutex);
+			auto key = _key_pressed.front();
+			_key_pressed.pop();
+
+			_world->use_input(key);
+
+			if(key == 'q') {
+				_quit = true;
+			}
+		}
+
 		// update game logic as lag permits
 		while(lag >= _timestep) {
 			lag -= _timestep;
 			_world->update();
 		}
+
+		_quit = _world->done();
 
 		// calculate how close or far we are from the next _timestep
 //		auto alpha = (float) lag.count() / _timestep.count();
@@ -58,25 +72,36 @@ void Game::start() {
 //		render(interpolated_state);
 
 		display.draw();
+	}
 
-		if(!_key_pressed.empty()) {
-			auto key = _key_pressed.front();
-			_key_pressed.pop();
+	quit();
 
-			_world->use_input(key);
-		}
+	std::cout << "GAME OVER" << std::endl;
+}
+
+void Game::quit() {
+	if(_input_thread.joinable()) {
+		_input_thread.join();
 	}
 }
 
 void Game::_handle_input() {
+	fd_set rfds;
+	struct timeval tv;
+	int retval;
+
 	while(!_quit) {
-		char c = getchar();
-
-		if(c == 'q') {
-			_quit = true;
+		// these initialisations need to be carried out every time we want to use the select function
+		FD_ZERO(&rfds);
+		FD_SET(0, &rfds);
+		tv.tv_sec = 0;
+		tv.tv_usec = 1000;
+		retval = select(1, &rfds, NULL, NULL, &tv);
+		if(retval) {
+			std::lock_guard<std::mutex> lock(_mutex);
+			char c = getchar();
+			_key_pressed.emplace(c);
 		}
-
-		_key_pressed.emplace(c);
 	}
 }
 

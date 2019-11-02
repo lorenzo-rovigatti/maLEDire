@@ -10,6 +10,7 @@
 namespace mldr {
 
 Snake::Snake(coordinates dim, std::chrono::nanoseconds timestep) :
+				_dimension(dim),
 				_current_direction( { 0, 1 }),
 				_speed(2.),
 				_elapsed_time(0.) {
@@ -48,13 +49,25 @@ void Snake::update() {
 
 	if(delta >= 1.) {
 		for(auto &segment : segments) {
-			segment[0] += _current_direction[0];
-			segment[1] += _current_direction[1];
+			for(int i = 0; i < 2; i++) {
+				int next_pos = segment[i] + _current_direction[i];
+				if(next_pos < 0 || next_pos >= _dimension[i]) {
+					_done = true;
+					return;
+				}
+				// we update the segments only if the game is not over
+				else {
+					segment[i] = next_pos;
+				}
+			}
 		}
 
-		_elapsed_time = 0.;
+		_elapsed_time -= 1. / _speed;
 	}
+}
 
+bool Snake::done() {
+	return _done;
 }
 
 } /* namespace mldr */

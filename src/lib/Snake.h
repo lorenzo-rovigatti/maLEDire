@@ -22,14 +22,17 @@ public:
 
 	void update();
 	void use_input(char c);
+	bool done();
 
 	std::vector<coordinates> segments;
 
 private:
+	coordinates _dimension;
 	coordinates _current_direction;
 	float _speed;
 	float _dt;
 	float _elapsed_time;
+	bool _done = false;
 };
 
 } /* namespace mldr */

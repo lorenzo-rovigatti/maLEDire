@@ -28,6 +28,7 @@ public:
 	virtual ~Game();
 
 	void start();
+	void quit();
 
 private:
 	void _handle_input();
@@ -39,6 +40,7 @@ private:
 
 	std::queue<char> _key_pressed;
 	std::thread _input_thread;
+	std::mutex _mutex;
 	coordinates _dimension = {32, 16};
 };
 

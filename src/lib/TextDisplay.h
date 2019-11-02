@@ -27,9 +27,6 @@ public:
 	void clear();
 	void draw();
 
-	void set_h_line(double v_pos, double from, double to, int new_value);
-	void set_v_line(double h_pos, double from, double to, int new_value);
-
 private:
 	int _idx(int col, int row);
 	int _hpos_to_int(double coord) {
