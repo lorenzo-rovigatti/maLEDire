@@ -43,9 +43,14 @@ void TextDisplay::draw() {
 	}
 
 	// fill the canvas
-	for(auto segment : _world->segments) {
+	for(auto &segment : _world->segments) {
 		int idx = _idx(segment[0], segment[1]);
 		_canvas[idx] = 1;
+	}
+
+	for(auto &food_bit : _world->food) {
+		int idx = _idx(food_bit[0], food_bit[1]);
+		_canvas[idx] = 2;
 	}
 
 	// print the score line
@@ -54,11 +59,16 @@ void TextDisplay::draw() {
 	for(int i = 0; i < _dimension[1]; i++) {
 		for(int j = 0; j < _dimension[0]; j++) {
 			int idx = _idx(j, i);
-			if(_canvas[idx]) {
+			switch(_canvas[idx]) {
+			case 1:
 				std::cout << "o ";
-			}
-			else {
+				break;
+			case 2:
+				std::cout << "x ";
+				break;
+			default:
 				std::cout << ". ";
+				break;
 			}
 		}
 		std::cout << std::endl;

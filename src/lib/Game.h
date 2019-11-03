@@ -40,7 +40,7 @@ private:
 	std::queue<char> _key_pressed;
 	std::thread _input_thread;
 	std::mutex _mutex;
-	coordinates _dimension = {32, 16};
+	coordinates _dimension = {16, 16};
 };
 
 } /* namespace mldr */

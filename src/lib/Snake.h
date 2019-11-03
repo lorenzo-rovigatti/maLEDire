@@ -9,6 +9,8 @@
 #define SRC_LIB_SNAKE_H_
 
 #include <chrono>
+#include <list>
+#include <map>
 #include <vector>
 
 #include "defs.h"
@@ -25,16 +27,27 @@ public:
 	void use_input(char c);
 	bool done();
 
-	std::vector<coordinates> segments;
+	std::list<coordinates> segments;
+	std::vector<coordinates> food;
+
+	enum Direction {
+		NORTH,
+		EAST,
+		SOUTH,
+		WEST
+	};
 
 private:
+	void _add_random_food();
+	bool _overlaps_with_segments(coordinates &pos);
+
 	coordinates _dimension;
-	coordinates _current_direction;
+	Direction _current_direction;
+	std::map<Direction, coordinates> _directions;
 	float _speed;
 	float _dt;
 	float _elapsed_time;
 	bool _done = false;
-	int _score = 3;
 };
 
 } /* namespace mldr */
