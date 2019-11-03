@@ -28,7 +28,6 @@ public:
 	virtual ~Game();
 
 	void start();
-	void quit();
 
 private:
 	void _handle_input();

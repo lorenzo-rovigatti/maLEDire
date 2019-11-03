@@ -7,6 +7,8 @@
 
 #include "Snake.h"
 
+#include <sstream>
+
 namespace mldr {
 
 Snake::Snake(coordinates dim, std::chrono::nanoseconds timestep) :
@@ -64,6 +66,14 @@ void Snake::update() {
 
 		_elapsed_time -= 1. / _speed;
 	}
+}
+
+std::string Snake::score_line() {
+	std::stringstream ss;
+
+	ss << "Score: " << _score << std::endl;
+
+	return ss.str();
 }
 
 bool Snake::done() {

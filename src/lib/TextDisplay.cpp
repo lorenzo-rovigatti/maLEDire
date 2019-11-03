@@ -25,25 +25,32 @@ TextDisplay::~TextDisplay() {
 
 }
 
-void TextDisplay::clear() {
+void TextDisplay::clear_canvas() {
 	std::fill(_canvas.begin(), _canvas.end(), 0);
 }
 
 void TextDisplay::draw() {
+	clear_canvas();
+
 	// move the cursor to the beginning so as to overwrite the last output
 	if(!_never_drawn) {
+		int output_dim = _dimension[1] + 1;
+
 		std::cout << "\r";
-		for(int i = 0; i < _dimension[1]; i++) {
+		for(int i = 0; i < output_dim; i++) {
 			std::cout << "\033[1A";
 		}
 	}
 
-	clear();
+	// fill the canvas
 	for(auto segment : _world->segments) {
 		int idx = _idx(segment[0], segment[1]);
 		_canvas[idx] = 1;
 	}
 
+	// print the score line
+	std::cout << _world->score_line();
+	// and the canvas
 	for(int i = 0; i < _dimension[1]; i++) {
 		for(int j = 0; j < _dimension[0]; j++) {
 			int idx = _idx(j, i);

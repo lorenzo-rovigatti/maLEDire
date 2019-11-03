@@ -21,6 +21,7 @@ public:
 	virtual ~Snake();
 
 	void update();
+	std::string score_line();
 	void use_input(char c);
 	bool done();
 
@@ -33,6 +34,7 @@ private:
 	float _dt;
 	float _elapsed_time;
 	bool _done = false;
+	int _score = 3;
 };
 
 } /* namespace mldr */

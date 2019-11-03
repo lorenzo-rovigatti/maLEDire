@@ -24,7 +24,7 @@ public:
 	TextDisplay(coordinates dim, std::chrono::nanoseconds pause_for, std::shared_ptr<Snake> world);
 	virtual ~TextDisplay();
 
-	void clear();
+	void clear_canvas();
 	void draw();
 
 private:

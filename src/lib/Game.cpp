@@ -27,7 +27,9 @@ Game::Game(std::chrono::nanoseconds timestep) :
 }
 
 Game::~Game() {
-
+	if(_input_thread.joinable()) {
+		_input_thread.join();
+	}
 }
 
 void Game::start() {
@@ -64,7 +66,9 @@ void Game::start() {
 			_world->update();
 		}
 
-		_quit = _world->done();
+		if(_world->done()) {
+			_quit = true;
+		}
 
 		// calculate how close or far we are from the next _timestep
 //		auto alpha = (float) lag.count() / _timestep.count();
@@ -74,15 +78,7 @@ void Game::start() {
 		display.draw();
 	}
 
-	quit();
-
 	std::cout << "GAME OVER" << std::endl;
-}
-
-void Game::quit() {
-	if(_input_thread.joinable()) {
-		_input_thread.join();
-	}
 }
 
 void Game::_handle_input() {
@@ -90,12 +86,14 @@ void Game::_handle_input() {
 	struct timeval tv;
 	int retval;
 
+	int us_timeout = std::chrono::duration_cast<std::chrono::microseconds>(_timestep).count();
+
 	while(!_quit) {
 		// these initialisations need to be carried out every time we want to use the select function
 		FD_ZERO(&rfds);
 		FD_SET(0, &rfds);
 		tv.tv_sec = 0;
-		tv.tv_usec = 1000;
+		tv.tv_usec = us_timeout;
 		retval = select(1, &rfds, NULL, NULL, &tv);
 		if(retval) {
 			std::lock_guard<std::mutex> lock(_mutex);
